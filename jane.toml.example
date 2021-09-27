@@ -1,0 +1,5 @@
+db_path = "jane.sqlite"
+sessions_dir = "sessions"
+addr = "127.0.0.1:3000"
+signup = true
+default_bang = "https://www.startpage.com/do/asearch"

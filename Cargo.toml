@@ -1,0 +1,39 @@
+[package]
+name = "jane"
+version = "0.1.0"
+
+[dependencies]
+bcrypt = "0.10.0"
+quick-error = "2.0.0"
+time = "0.2"
+libflate = "1.0.3"
+brotli = "1.0.3"
+r2d2 = "0.8.9"
+r2d2_sqlite = "0.18.0"
+toml = "0.5.8"
+serde = "1.0.130"
+serde_derive = "1.0.130"
+rusqlite_migration = "0.5.0"
+
+[dependencies.bart]
+git = "https://git.hunterpraska.com/hunter/bart.git"
+
+[dependencies.bart_derive]
+git = "https://git.hunterpraska.com/hunter/bart.git"
+
+[dependencies.chrono]
+version = "0.4.19"
+features = ["serde"]
+
+[dependencies.hayaku]
+git = "https://git.hunterpraska.com/hunter/hayaku.git"
+
+[dependencies.check-psql]
+git = "https://git.hunterpraska.com/hunter/check-psql.git"
+
+[dependencies.rusqlite]
+version = "0.25.3"
+features = ["bundled", "chrono"]
+
+[dependencies.sessions]
+git = "https://git.hunterpraska.com/hunter/sessions.git"

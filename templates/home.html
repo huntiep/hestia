@@ -1,0 +1,13 @@
+<a href="/settings">Settings</a>
+<a href="/logout">Logout</a><br>
+<p>{{search_uses.0}} Default Searches, {{search_uses.1}} Meta Searches<p><br>
+
+<form method="POST" action="/search">
+    <input name="q" type="text" autofocus="true" search_/>
+</form>
+
+<ul>
+{{#links}}
+    <li><a href="{{.url}}">{{.name}}</a></li>
+{{/links}}
+</ul>

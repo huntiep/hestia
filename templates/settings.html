@@ -1,0 +1,72 @@
+<a href="/">Home</a>
+
+<h2>User settings</h1>
+
+<h3>Change Email</h3>
+<form method="POST" action="/settings/email">
+    <label for="email">Email Address</label><br>
+    <input name="email" type="text" value="{{.email}}"/>
+    <button type="submit">Change Email</button>
+</form>
+
+<h3>Change Password</h3>
+<form method="POST" action="/settings/password">
+    <label for="old_password">Old Password</label>
+    <input name="old_password" type="password"/><br>
+    <label for="new_password">New Password</label>
+    <input name="new_password" type="password"/><br>
+    <label for="confirm_password">Confirm Password</label>
+    <input name="confirm_password" type="password"/><br>
+    <button type="submit">Change Password</button>
+</form>
+
+<h2>Quick Links</h1>
+<p>Links displayed on your home page.</p>
+
+<h3>Create a New Quick Link</h3>
+<form method="POST" action="/settings/links">
+    <label for="name">Name</label>
+    <input name="name" type="text"/><br>
+    <label for="url">URL</label>
+    <input name="url" type="text"/><br>
+    <button type="submit">Create Quick Link</button>
+</form>
+
+<h3>Existing Quick Links</h3>
+<ul>
+{{#links}}
+    <form method="POST" action="/settings/links/{{.id}}">
+        <input name="name" type="text" value="{{.name}}"/>
+        <input name="url" type="text" value="{{.url}}"/>
+        <button type="submit">Edit Quick Link</button>
+        <a href="/settings/links/{{.id}}/delete">Delete</a>
+    </form>
+{{/links}}
+</ul>
+
+<details>
+    <summary>Advanced Settings</summary>
+    <h2>Bangs</h1>
+    <p>Description about bangs</p>
+
+    <h3>Create a New Bang</h3>
+    <form method="POST" action="/settings/bangs">
+        <label for="bang">Bang Command !</label>
+        <input name="bang" type="text"/><br>
+        <label for="value">URL</label>
+        <input name="value" type="text"/><br>
+        <button type="submit">Create Bang</button>
+    </form>
+
+    <h3>Existing Bangs</h3>
+    <ul>
+    {{#bangs}}
+        <form method="POST" action="/settings/bangs/{{.id}}">
+            <input name="bang" type="text" value="{{.bang}}"/>
+            <input name="value" type="text" value="{{.value}}"/>
+            <button type="submit">Edit Bang</button>
+            <a href="/settings/bangs/{{.id}}/delete">Delete</a>
+    </form>
+    {{/bangs}}
+    </ul>
+</details>
