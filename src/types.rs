@@ -86,6 +86,7 @@ pub struct Bang {
     pub owner: i32,
     pub bang: String,
     pub value: String,
+    pub uses: i32,
 }
 
 impl Bang {
@@ -97,6 +98,7 @@ impl Bang {
             owner: owner,
             bang: bang,
             value: value,
+            uses: 0,
         })
     }
 }

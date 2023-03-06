@@ -3,17 +3,17 @@ name = "jane"
 version = "0.1.0"
 
 [dependencies]
-bcrypt = "0.10.0"
-quick-error = "2.0.0"
-time = "0.2"
-libflate = "1.0.3"
-brotli = "1.0.3"
-r2d2 = "0.8.9"
-r2d2_sqlite = "0.18.0"
-toml = "0.5.8"
-serde = "1.0.130"
-serde_derive = "1.0.130"
-rusqlite_migration = "0.5.0"
+bcrypt = "0.14.0"
+quick-error = "2.0.1"
+time = "0.3.20"
+libflate = "1.3.0"
+brotli = "3.3.4"
+r2d2 = "0.8.10"
+r2d2_sqlite = "0.21.0"
+toml = "0.7.2"
+serde = "1.0.152"
+serde_derive = "1.0.152"
+rusqlite_migration = "1.0.1"
 
 [dependencies.bart]
 git = "https://git.hunterpraska.com/hunter/bart.git"
@@ -22,7 +22,7 @@ git = "https://git.hunterpraska.com/hunter/bart.git"
 git = "https://git.hunterpraska.com/hunter/bart.git"
 
 [dependencies.chrono]
-version = "0.4.19"
+version = "0.4.23"
 features = ["serde"]
 
 [dependencies.hayaku]
@@ -32,7 +32,7 @@ git = "https://git.hunterpraska.com/hunter/hayaku.git"
 git = "https://git.hunterpraska.com/hunter/check-psql.git"
 
 [dependencies.rusqlite]
-version = "0.25.3"
+version = "0.28.0"
 features = ["bundled", "chrono"]
 
 [dependencies.sessions]

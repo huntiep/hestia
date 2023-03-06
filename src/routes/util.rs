@@ -43,13 +43,13 @@ pub fn logout(req_cookies: &CookieJar, res_cookies: &mut CookieJar, ctx: &Contex
         ctx.logins.lock().unwrap().remove(cookie.value());
         let del_cookie = Cookie::build("session_key", "")
             .max_age(time::Duration::seconds(0))
-            .expires(time::OffsetDateTime::unix_epoch())
+            .expires(time::OffsetDateTime::UNIX_EPOCH)
             .finish();
         res_cookies.add(del_cookie);
 
         let del_cookie = Cookie::build("dotcom_user", "")
             .max_age(time::Duration::seconds(0))
-            .expires(time::OffsetDateTime::unix_epoch())
+            .expires(time::OffsetDateTime::UNIX_EPOCH)
             .finish();
         res_cookies.add(del_cookie);
     }

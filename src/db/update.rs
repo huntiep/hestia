@@ -16,15 +16,17 @@ pub fn password(pool: &Pool, username: &str, password: &UpdatePassword) -> Resul
     Ok(())
 }
 
-pub fn search_uses(pool: &Pool, username: &str, defaultp: bool) -> Result<()> {
+pub fn search_uses(pool: &Pool, username: &str, bang: i32, defaultp: bool) -> Result<()> {
     let conn = pool.get()?;
     if defaultp {
         conn.execute(query!("UPDATE users SET default_uses = default_uses + 1 WHERE username = ?1"),
             params![username])?;
     } else {
-        conn.execute(query!("UPDATE users SET bang_uses = default_uses + 1 WHERE username = ?1"),
+        conn.execute(query!("UPDATE users SET bang_uses = bang_uses + 1 WHERE username = ?1"),
             params![username])?;
     }
+    conn.execute(query!("UPDATE bangs SET uses = uses + 1 WHERE id = ?1"),
+        params![bang])?;
     Ok(())
 }
 

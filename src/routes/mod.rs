@@ -92,13 +92,13 @@ route!{search, req, res, ctx, {
     if search.starts_with('!') {
         let terms: Vec<&str> = search.splitn(2, ' ').collect();
         let (bang, search): (&str, &str) = (&terms[0][1..], terms[1]);
-        let bang = db::read::bang(&ctx.db_pool, username, bang)?;
-        db::update::search_uses(&ctx.db_pool, username, false)?;
+        let (bang_id, bang) = db::read::bang(&ctx.db_pool, username, bang)?;
+        db::update::search_uses(&ctx.db_pool, username, bang_id, false)?;
         let url = bang + search;
-        redirect!(res, ctx, url, "You are being redirected");
+        ok!(res.redirect(Status::TEMPORARY_REDIRECT, &url, "You are being redirected"));
     } else {
-        let bang = db::read::bang(&ctx.db_pool, username, "default")?;
-        db::update::search_uses(&ctx.db_pool, username, true)?;
+        let (bang_id, bang) = db::read::bang(&ctx.db_pool, username, "default")?;
+        db::update::search_uses(&ctx.db_pool, username, bang_id, true)?;
         ok!(res.redirect(Status::TEMPORARY_REDIRECT, &bang, "You are being redirected"));
     }
 }}
