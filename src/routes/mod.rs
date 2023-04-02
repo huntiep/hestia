@@ -95,7 +95,7 @@ route!{search, req, res, ctx, {
         let (bang_id, bang) = db::read::bang(&ctx.db_pool, username, bang)?;
         db::update::search_uses(&ctx.db_pool, username, bang_id, false)?;
         let url = bang + search;
-        ok!(res.redirect(Status::TEMPORARY_REDIRECT, &url, "You are being redirected"));
+        ok!(res.redirect(Status::FOUND, &url, "You are being redirected"));
     } else {
         let (bang_id, bang) = db::read::bang(&ctx.db_pool, username, "default")?;
         db::update::search_uses(&ctx.db_pool, username, bang_id, true)?;
