@@ -35,7 +35,7 @@ macro_rules! check_login {
             if let Some(name) = ::routes::util::check_login($ctx, $cookies)? {
                 name
             } else {
-                error!($res, $ctx, "admin", "You must be logged in for this");
+                error!($res, $ctx, "", "You must be logged in for this");
             }
         }
     };
