@@ -33,6 +33,12 @@ pub fn user(pool: &Pool, username: &str) -> Result<Login> {
     })?)
 }
 
+pub fn user_by_api_key(pool: &Pool, api_key: &str) -> Result<String> {
+    let conn = pool.get()?;
+    let mut stmt = conn.prepare(query!("SELECT username FROM users WHERE api_key = ?1"))?;
+    Ok(stmt.query_row(params![api_key], |row| row.get(0))?)
+}
+
 pub fn search_uses(pool: &Pool, username: &str) -> Result<(u32, u32)> {
     let conn = pool.get()?;
     let mut stmt = conn.prepare(query!("SELECT default_uses, bang_uses FROM users WHERE username = ?1"))?;

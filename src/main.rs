@@ -123,7 +123,7 @@ fn main() {
     let ctx = Context {
         db_pool: pool,
         logins: Arc::new(Mutex::new(sessions)),
-        name: "Jane".to_string(),
+        name: "Hestia".to_string(),
         mount: mount,
         signup: config.signup,
         default_bang: config.default_bang,
@@ -153,6 +153,7 @@ fn main() {
 
         // search
         post "/search" => search,
+        get "/search" => search_n,
         post "/opensearch.xml" => opensearch,
 
         // finance
