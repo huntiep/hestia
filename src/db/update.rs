@@ -2,17 +2,18 @@ use Result;
 use types::*;
 use super::Pool;
 
-pub fn email(pool: &Pool, username: &str, email: &str) -> Result<()> {
+pub fn password(pool: &Pool, password: &Login) -> Result<()> {
     let conn = pool.get()?;
-    conn.execute(query!("UPDATE users SET email = ?1 WHERE username = ?2"),
-        params![email, username])?;
+    conn.execute(query!("UPDATE users SET password = ?1 WHERE username = ?2"),
+        params![password.password, password.username])?;
     Ok(())
 }
 
-pub fn password(pool: &Pool, username: &str, password: &UpdatePassword) -> Result<()> {
+pub fn new_api_key(pool: &Pool, username: &str) -> Result<()> {
     let conn = pool.get()?;
-    conn.execute(query!("UPDATE users SET password = ?1 WHERE username = ?2"),
-        params![password.password, username])?;
+    let api_key = Login::gen_api_key();
+    conn.execute(query!("UPDATE users SET api_key = ?1 WHERE username = ?2"),
+        params![api_key, username])?;
     Ok(())
 }
 

@@ -55,6 +55,17 @@ pub struct HomeTmpl {
 pub struct SettingsTmpl {
     pub bangs: Vec<Bang>,
     pub links: Vec<Link>,
-    //pub feeds: Vec<FeedUrl>,
-    pub email: String,
+    pub api_key: String,
+}
+
+#[derive(BartDisplay)]
+#[template = "templates/finance/home.html"]
+pub struct FinanceHomeTmpl {
+    pub accounts: Vec<Account>,
+}
+
+#[derive(BartDisplay)]
+#[template = "templates/finance/account.html"]
+pub struct FinanceAccountTmpl {
+    pub transactions: Transactions,
 }

@@ -1,5 +1,5 @@
 [package]
-name = "jane"
+name = "hestia"
 version = "0.1.0"
 
 [dependencies]
@@ -14,6 +14,7 @@ toml = "0.7.3"
 serde = "1.0.159"
 serde_derive = "1.0.159"
 rusqlite_migration = "1.0.2"
+rand = "0.8.5"
 
 [dependencies.bart]
 git = "https://git.hunterpraska.com/hunter/bart.git"

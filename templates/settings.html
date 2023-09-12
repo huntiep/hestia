@@ -2,12 +2,8 @@
 
 <h2>User settings</h1>
 
-<h3>Change Email</h3>
-<form method="POST" action="/settings/email">
-    <label for="email">Email Address</label><br>
-    <input name="email" type="text" value="{{.email}}"/>
-    <button type="submit">Change Email</button>
-</form>
+<style>.spoiler{background-color:#000}.spoiler:hover{color:#fff}</style>
+API Key: <span class="spoiler">{{api_key}}</span> <a href="/settings/new-api-key">Generate new key</a><br>
 
 <h3>Change Password</h3>
 <form method="POST" action="/settings/password">

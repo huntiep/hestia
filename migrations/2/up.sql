@@ -1,0 +1,19 @@
+CREATE TABLE IF NOT EXISTS accounts (
+    id INTEGER PRIMARY KEY,
+    owner INTEGER REFERENCES users (id) ON DELETE CASCADE,
+    name VARCHAR NOT NULL,
+    amount BIGINT default 0 NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS transactions (
+    id INTEGER PRIMARY KEY,
+    owner INTEGER REFERENCES users (id) ON DELETE CASCADE,
+    f INTEGER REFERENCES accounts (id) ON DELETE CASCADE,
+    t INTEGER REFERENCES accounts (id) ON DELETE CASCADE,
+    amount BIGINT NOT NULL,
+    reason TEXT,
+    time DATETIME NOT NULL
+);
+
+ALTER TABLE users DROP COLUMN email;
+ALTER TABLE users ADD api_key VARCHAR(50);

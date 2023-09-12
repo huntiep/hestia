@@ -1,0 +1,20 @@
+<a href="/">Home</a>
+<a href="/logout">Logout</a><br>
+<h3>{{transactions.account}}</h3>
+<p><b>Balance: </b>${{transactions.dollars}}.{{transactions.cents}}</p>
+
+<ul>
+    {{#transactions.transactions}}
+    <li>
+        <p><b>{{.from}} => {{.to}}</b> ${{.dollars}}.{{.cents}} <i>{{.date}}</i><br>
+        <p>{{.reason}}</p>
+    </li>
+    {{/transactions.transactions}}
+</ul>
+<br><br>
+
+<form method="POST" action="/finance/account/{{transactions.id}}">
+    <input name="name" type="text" value="{{transactions.account}}"/>
+    <button type="submit">Change Account Name</button>
+    <a href="/finance/account/{{transactions.id}}/delete">Delete Account</a><br>
+</form>

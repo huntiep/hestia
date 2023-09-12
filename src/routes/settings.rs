@@ -14,7 +14,7 @@ route!{settings, req, res, ctx, {
     let body = SettingsTmpl {
         bangs: bangs,
         links: links,
-        email: user.email,
+        api_key: user.api_key,
     };
     let tmpl = Template::new(Some("Settings"), body);
     Ok(res.fmt_body(tmpl))
@@ -27,33 +27,21 @@ route!{password, req, res, ctx, {
 
     let pool = &ctx.db_pool;
     let user = db::read::user(pool, username)?;
-    let password = UpdatePassword::new(req, user.password);
+    let password = Login::change_password(req, username.to_string(), user.password);
     if password.is_none() {
         redirect!(res, ctx, "settings", "Invalid data");
     }
     let password = password.unwrap();
 
-    db::update::password(&ctx.db_pool, username, &password)?;
+    db::update::password(&ctx.db_pool, &password)?;
 
     redirect!(res, ctx, "settings", "Password updated");
 }}
 
-// POST /settings/email
-route!{email, req, res, ctx, {
-    let cookies = req.get_cookies();
-    let username = check_login!(&cookies, res, ctx);
-
-    let email = if let Some(email) = req.form_value("email") {
-        email
-    } else {
-        redirect!(res, ctx, "settings", "Invalid input");
-    };
-    if email.is_empty() {
-        redirect!(res, ctx, "settings", "Invalid input");
-    }
-
-    db::update::email(&ctx.db_pool, username, &email)?;
-    redirect!(res, ctx, "settings", "Email updated");
+// GET /settings/new-api-key
+route!{new_api_key, req, res, ctx, {
+    db::update::new_api_key(&ctx.db_pool, &check_login!(&req.get_cookies(), res, ctx))?;
+    redirect!(res, ctx, "settings", "Api key changed");
 }}
 
 // POST /settings/bangs

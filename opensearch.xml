@@ -1,11 +1,11 @@
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
                        xmlns:moz="http://www.mozilla.org/2006/browser/search/">
-  <ShortName>Jane</ShortName>
-  <Description>Jane custom search</Description>
+  <ShortName>Hestia</ShortName>
+  <Description>Hestia custom search</Description>
   <InputEncoding>UTF-8</InputEncoding>
-  <Url type="text/html" method="POST" template="https://jane.hunterpraska.com/search">
+  <Url type="text/html" method="POST" template="https://hestia.hunterpraska.com/search">
     <Param name="q" value="{searchTerms}"/>
   </Url>
-  <URL type="application/opensearchdescription+xml" rel="self" template="https://jane.hunterpraska.com/opensearch.xml" />
+  <URL type="application/opensearchdescription+xml" rel="self" template="https://hestia.hunterpraska.com/opensearch.xml" />
   <moz:SearchForm>YOUR_URL</moz:SearchForm>
 </OpenSearchDescription>

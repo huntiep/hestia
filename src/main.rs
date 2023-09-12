@@ -12,6 +12,7 @@ extern crate libflate;
 extern crate quick_error;
 extern crate r2d2;
 extern crate r2d2_sqlite;
+extern crate rand;
 #[macro_use]
 extern crate rusqlite;
 extern crate rusqlite_migration;
@@ -84,7 +85,7 @@ pub struct Context {
 }
 
 fn main() {
-    let config_path = "jane.toml";
+    let config_path = "hestia.toml";
     let buf = fs::read_to_string(config_path).expect("failed to read config");
     let config: Config = toml::from_str(&buf).expect("failed to parse config");
 
@@ -97,6 +98,8 @@ fn main() {
         let migrations = Migrations::new(vec![
             M::up(include_str!("../migrations/1/up.sql"))
                 .down(include_str!("../migrations/1/down.sql")),
+            M::up(include_str!("../migrations/2/up.sql"))
+                .down(include_str!("../migrations/2/down.sql")),
         ]);
         let mut conn = pool.get().unwrap();
         migrations.to_latest(&mut conn).unwrap();
@@ -139,7 +142,7 @@ fn main() {
 
         // settings
         get "/settings" => settings::settings,
-        post "/settings/email" => settings::email,
+        get "/settings/new-api-key" => settings::new_api_key,
         post "/settings/password" => settings::password,
         post "/settings/bangs" => settings::create_bang,
         post "/settings/bangs/{id:[[:digit:]]+}" => settings::edit_bang,
@@ -151,6 +154,14 @@ fn main() {
         // search
         post "/search" => search,
         post "/opensearch.xml" => opensearch,
+
+        // finance
+        get "/finance" => finance::home,
+        post "/finance/account" => finance::new_account,
+        get "/finance/account/{id:[[:digit:]]+}" => finance::view_account,
+        post "/finance/account/{id:[[:digit:]]+}" => finance::edit_account,
+        get "/finance/account/{id:[[:digit:]]+}/delete" => finance::delete_account,
+        post "/finance/transaction" => finance::new_transaction,
     }
 
     let addr = config.addr.unwrap_or_else(|| "127.0.0.1:3000".parse().unwrap());

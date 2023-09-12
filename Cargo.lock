@@ -623,6 +623,31 @@ dependencies = [
 ]
 
 [[package]]
+name = "hestia"
+version = "0.1.0"
+dependencies = [
+ "bart",
+ "bart_derive",
+ "bcrypt",
+ "brotli",
+ "check-psql",
+ "chrono",
+ "hayaku",
+ "libflate",
+ "quick-error 2.0.1",
+ "r2d2",
+ "r2d2_sqlite",
+ "rand 0.8.5",
+ "rusqlite",
+ "rusqlite_migration",
+ "serde",
+ "serde_derive",
+ "sessions",
+ "time 0.3.20",
+ "toml",
+]
+
+[[package]]
 name = "hkdf"
 version = "0.12.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -724,30 +749,6 @@ name = "itoa"
 version = "1.0.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "453ad9f582a441959e5f0d088b02ce04cfe8d51a8eaf077f12ac6d3e94164ca6"
-
-[[package]]
-name = "jane"
-version = "0.1.0"
-dependencies = [
- "bart",
- "bart_derive",
- "bcrypt",
- "brotli",
- "check-psql",
- "chrono",
- "hayaku",
- "libflate",
- "quick-error 2.0.1",
- "r2d2",
- "r2d2_sqlite",
- "rusqlite",
- "rusqlite_migration",
- "serde",
- "serde_derive",
- "sessions",
- "time 0.3.20",
- "toml",
-]
 
 [[package]]
 name = "js-sys"

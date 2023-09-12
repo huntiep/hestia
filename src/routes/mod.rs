@@ -2,6 +2,7 @@ use {db, Context, Error};
 use templates::*;
 use types::*;
 
+pub mod finance;
 pub mod settings;
 mod util;
 
@@ -41,7 +42,7 @@ route!{signup_post, req, res, ctx, {
         redirect!(res, ctx, "", "You already have an account");
     }
 
-    let new_user = if let Some(user) = NewUser::new(req) {
+    let new_user = if let Some(user) = Login::new_user(req) {
         user
     } else {
         redirect!(res, ctx, "signup", "Signup failed");

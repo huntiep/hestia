@@ -1,0 +1,39 @@
+<a href="/settings">Settings</a>
+<a href="/logout">Logout</a><br>
+
+<h3>Make a New Transaction</h3>
+<form method="POST" action="/finance/transaction">
+    <label for="from">From:</label>
+    <select name="from">
+        <option value="__none">None</option>
+        {{#accounts}}
+        <option value="{{.name}}">{{.name}}</option>
+        {{/accounts}}
+    </select><br>
+    <label for="to">To:</label>
+    <select name="to">
+        <option value="__none">None</option>
+        {{#accounts}}
+        <option value="{{.name}}">{{.name}}</option>
+        {{/accounts}}
+    </select><br>
+    <label for="amount">Amount:</label>
+    <input name="amount" type="number" placeholder="0.00" step="0.01" min="0.00"/><br>
+    <label for="reason">Reason:</label>
+    <input name="reason" type="text"/><br>
+    <button type="submit">Add Transaction</button>
+</form>
+
+<h3>Create a New Account</h3>
+<form method="POST" action="/finance/account">
+    <label for="name">Name</label>
+    <input name="name" type="text"/><br>
+    <button type="submit">Create Account</button>
+</form>
+
+<h3>Accounts</h3>
+<ul>
+{{#accounts}}
+    <p><b>{{.name}} Balance: </b>${{.dollars}}.{{.cents}} <a href="/finance/account/{{.id}}">Transaction History</a></p>
+{{/accounts}}
+</ul>
