@@ -1,4 +1,5 @@
 use bcrypt::{self, DEFAULT_COST};
+use chrono::{DateTime, Utc};
 use hayaku::Request;
 use rand::Rng;
 use rand::distributions::Alphanumeric;
@@ -211,4 +212,18 @@ pub struct Transactions {
     pub dollars: i64,
     pub cents: u8,
     pub transactions: Vec<Transaction>,
+}
+
+pub enum Recurrence {
+    None = 0,
+    Day = 1,
+    Week = 2,
+    Month = 3,
+    Year = 4,
+}
+
+pub struct Reminder {
+    pub recurrence: Recurrence,
+    pub date: DateTime<Utc>,
+    pub reason: String,
 }

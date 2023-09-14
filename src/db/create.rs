@@ -57,3 +57,10 @@ pub fn transaction(pool: &Pool, transaction: NewTransaction) -> Result<()> {
     }
     Ok(tx.commit()?)
 }
+
+pub fn reminder(pool: &Pool, owner: i32, reminder: Reminder) -> Result<()> {
+    let conn = pool.get()?;
+    conn.execute(query!("INSERT INTO reminders (owner, recurrence, date, reason) VALUES (?1, ?2, ?3)"),
+        params![owner, reminder.recurrence as i32, reminder.date, reminder.reason])?;
+    Ok(())
+}

@@ -174,3 +174,26 @@ pub fn account(pool: &Pool, owner: i32, account_id: i64) -> Result<Transactions>
         transactions,
     })
 }
+
+/*
+pub fn reminders(pool: &Pool, owner: i32) -> Result<Vec<Reminder>> {
+    let conn = pool.get()?;
+    let mut stmt = conn.prepare(query!("SELECT id, name, amount FROM accounts WHERE owner = ?1"))?;
+    let rows = stmt.query_map(params![id], |row| {
+        let amount: i64 = row.get(2)?;
+        Ok(Account {
+            id: row.get(0)?,
+            name: row.get(1)?,
+            dollars: amount / 100,
+            cents: (amount.abs() % 100) as u8,
+        })
+    })?;
+    let mut accounts = Vec::new();
+    for r in rows {
+        let r = r?;
+        if r.name != "__none" {
+            accounts.push(r);
+        }
+    }
+}
+*/
