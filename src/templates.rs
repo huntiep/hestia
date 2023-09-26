@@ -48,6 +48,8 @@ impl<'a, T: Display> Template<'a, T> {
 pub struct HomeTmpl {
     pub links: Vec<Link>,
     pub search_uses: (u32, u32),
+    pub reminders: Reminders,
+    pub api_key: String,
 }
 
 #[derive(BartDisplay)]

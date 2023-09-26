@@ -100,6 +100,8 @@ fn main() {
                 .down(include_str!("../migrations/1/down.sql")),
             M::up(include_str!("../migrations/2/up.sql"))
                 .down(include_str!("../migrations/2/down.sql")),
+            M::up(include_str!("../migrations/3/up.sql"))
+                .down(include_str!("../migrations/3/down.sql")),
         ]);
         let mut conn = pool.get().unwrap();
         migrations.to_latest(&mut conn).unwrap();
@@ -163,6 +165,9 @@ fn main() {
         post "/finance/account/{id:[[:digit:]]+}" => finance::edit_account,
         get "/finance/account/{id:[[:digit:]]+}/delete" => finance::delete_account,
         post "/finance/transaction" => finance::new_transaction,
+
+        // reminders
+        post "/reminders/new" => reminders::new_reminder,
     }
 
     let addr = config.addr.unwrap_or_else(|| "127.0.0.1:3000".parse().unwrap());

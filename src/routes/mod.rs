@@ -3,6 +3,7 @@ use templates::*;
 use types::*;
 
 pub mod finance;
+pub mod reminders;
 pub mod settings;
 mod util;
 
@@ -14,7 +15,9 @@ route!{home, req, res, ctx, {
     if let Some(username) = util::check_login(ctx, cookies)? {
         let links = db::read::quick_links(&ctx.db_pool, username)?;
         let search_uses = db::read::search_uses(&ctx.db_pool, username)?;
-        let body = HomeTmpl { links: links, search_uses: search_uses };
+        let reminders = db::read::reminders(&ctx.db_pool, username)?;
+        let api_key = db::read::user(&ctx.db_pool, username)?.api_key;
+        let body = HomeTmpl { links, search_uses, reminders, api_key };
         tmpl!(req, res, ctx, Some("Home"), body);
     } else {
         let body = include_str!("../../templates/login.html");

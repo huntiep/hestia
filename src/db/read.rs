@@ -2,6 +2,8 @@ use {Error, Result};
 use types::*;
 use super::Pool;
 
+use chrono::{Datelike, NaiveDate, Utc};
+
 use std::collections::HashMap;
 
 pub fn check_login(pool: &Pool, login: &Login) -> Result<bool> {
@@ -175,25 +177,89 @@ pub fn account(pool: &Pool, owner: i32, account_id: i64) -> Result<Transactions>
     })
 }
 
-/*
-pub fn reminders(pool: &Pool, owner: i32) -> Result<Vec<Reminder>> {
+pub fn reminders(pool: &Pool, username: &str) -> Result<Reminders> {
+    let now = Utc::now();
+
+    let owner = user_id(pool, username)?;
     let conn = pool.get()?;
-    let mut stmt = conn.prepare(query!("SELECT id, name, amount FROM accounts WHERE owner = ?1"))?;
-    let rows = stmt.query_map(params![id], |row| {
-        let amount: i64 = row.get(2)?;
-        Ok(Account {
-            id: row.get(0)?,
-            name: row.get(1)?,
-            dollars: amount / 100,
-            cents: (amount.abs() % 100) as u8,
-        })
+    let mut stmt = conn.prepare(query!("SELECT reason, date FROM reminders WHERE owner = ?1 AND recurrence = ?2 AND date >= date() AND date <= date('now', '+1 month') ORDER BY date"))?;
+    let rows = stmt.query_map(params![owner, Recurrence::None as i32], |row| {
+        Ok((row.get(0)?, row.get(1)?))
     })?;
-    let mut accounts = Vec::new();
+    let mut non_recurring: Vec<(String, NaiveDate)>  = Vec::new();
     for r in rows {
-        let r = r?;
-        if r.name != "__none" {
-            accounts.push(r);
+        non_recurring.push(r?);
+    }
+
+    let mut stmt = conn.prepare(query!("SELECT reason, date FROM reminders WHERE owner = ?1 AND recurrence = ?2"))?;
+    let rows = stmt.query_map(params![owner, Recurrence::Day as i32], |row| {
+        Ok((row.get(0)?, row.get(1)?))
+    })?;
+    let mut day: Vec<(String, NaiveDate)>  = Vec::new();
+    for r in rows {
+        day.push(r?);
+    }
+
+    let mut stmt = conn.prepare(query!("SELECT reason, date FROM reminders WHERE owner = ?1 AND recurrence = ?2"))?;
+    let rows = stmt.query_map(params![owner, Recurrence::Week as i32], |row| {
+        Ok((row.get(0)?, row.get(1)?))
+    })?;
+    let mut week: Vec<(String, NaiveDate)>  = Vec::new();
+    for r in rows {
+        week.push(r?);
+    }
+    week.sort_unstable_by(|(_, datel), (_, dater)| {
+        datel.weekday().number_from_monday().partial_cmp(&dater.weekday().number_from_monday()).unwrap()
+    });
+    let p = week.partition_point(|(_, date)| date.weekday().number_from_monday() < now.weekday().number_from_monday());
+    week.rotate_left(p);
+    let week = week.into_iter().map(|(r, d)| (r, d.weekday().to_string())).collect();
+
+    let mut stmt = conn.prepare(query!("SELECT reason, date FROM reminders WHERE owner = ?1 AND recurrence = ?2"))?;
+    let rows = stmt.query_map(params![owner, Recurrence::Month as i32], |row| {
+        Ok((row.get(0)?, row.get(1)?))
+    })?;
+    let mut m: Vec<(String, NaiveDate)>  = Vec::new();
+    for r in rows {
+        m.push(r?);
+    }
+    m.sort_unstable_by(|(_, datel), (_, dater)| {
+        datel.day().partial_cmp(&dater.day()).unwrap()
+    });
+    let p = m.partition_point(|(_, date)| date.day() < now.day());
+    let mut month = Vec::with_capacity(m.len());
+    for (i, (r, d)) in m.into_iter().enumerate() {
+        if i < p {
+            month.push((r, format!("{} {}", (now + ::chrono::Months::new(1)).format("%B"), d.format("%-d"))));
+        } else {
+            month.push((r, format!("{} {}", now.format("%B"), d.format("%-d"))));
         }
     }
+    month.rotate_left(p);
+
+    let mut stmt = conn.prepare(query!("SELECT reason, date FROM reminders WHERE owner = ?1 AND recurrence = ?2"))?;
+    let rows = stmt.query_map(params![owner, Recurrence::Year as i32], |row| {
+        Ok((row.get(0)?, row.get(1)?))
+    })?;
+    let mut year: Vec<(String, NaiveDate)>  = Vec::new();
+    for r in rows {
+        let (reason, date): (String, NaiveDate) = r?;
+        if date.month() == now.month() {
+            year.push((reason, date));
+        } else if date.month() == now.month() + 1 && (date.day() as i32 + 30 - now.day() as i32).abs() <= 30 {
+            year.push((reason, date));
+        }
+    }
+    year.sort_unstable_by(|(_, datel), (_, dater)| {
+        datel.ordinal().partial_cmp(&dater.ordinal()).unwrap()
+    });
+    let year = year.into_iter().map(|(r, d)| (r, d.format("%B %-d").to_string())).collect();
+
+    Ok(Reminders {
+        non_recurring,
+        day,
+        week,
+        month,
+        year,
+    })
 }
-*/

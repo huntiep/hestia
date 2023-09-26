@@ -1,5 +1,5 @@
 use bcrypt::{self, DEFAULT_COST};
-use chrono::{DateTime, Utc};
+use chrono::NaiveDate;
 use hayaku::Request;
 use rand::Rng;
 use rand::distributions::Alphanumeric;
@@ -224,6 +224,35 @@ pub enum Recurrence {
 
 pub struct Reminder {
     pub recurrence: Recurrence,
-    pub date: DateTime<Utc>,
     pub reason: String,
+    pub date: NaiveDate,
+}
+
+impl Reminder {
+    pub fn new(req: &mut Request) -> Option<Self> {
+        let (reason, date, recurrence) = form_values!(req, "reason", "date", "recurrence");
+        let recurrence = match recurrence.as_str() {
+            "none" => Recurrence::None,
+            "day" => Recurrence::Day,
+            "week" => Recurrence::Week,
+            "month" => Recurrence::Month,
+            "year" => Recurrence::Year,
+            _ => return None,
+        };
+        let date = NaiveDate::parse_from_str(&date, "%Y-%m-%d").ok()?;
+
+        Some(Reminder {
+            recurrence,
+            reason,
+            date: date.into(),
+        })
+    }
+}
+
+pub struct Reminders {
+    pub non_recurring: Vec<(String, NaiveDate)>,
+    pub day: Vec<(String, NaiveDate)>,
+    pub week: Vec<(String, String)>,
+    pub month: Vec<(String, String)>,
+    pub year: Vec<(String, String)>,
 }

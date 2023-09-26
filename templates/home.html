@@ -11,3 +11,37 @@
     <li><a href="{{.url}}">{{.name}}</a></li>
 {{/links}}
 </ul>
+
+<form method="POST" action="/reminders/new">
+    <label for="reason">Reason:</label>
+    <input name="reason" type="text"/>
+    <label for="recurrence">Recurrence:</label>
+    <select name="recurrence">
+        <option value="none">None</option>
+        <option value="day">Day</option>
+        <option value="week">Week</option>
+        <option value="month">Month</option>
+        <option value="year">Year</option>
+    </select>
+    <label for="date">Date:</label>
+    <input name="date" type="date"/>
+    <button type="submit">Add Reminder</button>
+</form>
+
+<ul>
+    {{#reminders.non_recurring}}
+    <li>{{.0}} @ {{.1}}</li>
+    {{/reminders.non_recurring}}
+    {{#reminders.day}}
+    <li>{{.0}} @ {{.1}}</li>
+    {{/reminders.day}}
+    {{#reminders.week}}
+    <li>{{.0}} @ {{.1}}</li>
+    {{/reminders.week}}
+    {{#reminders.month}}
+    <li>{{.0}} @ {{.1}}</li>
+    {{/reminders.month}}
+    {{#reminders.year}}
+    <li>{{.0}} @ {{.1}}</li>
+    {{/reminders.year}}
+</ul>
