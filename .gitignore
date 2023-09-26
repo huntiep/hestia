@@ -2,3 +2,4 @@
 hestia.toml
 hestia.sqlite
 /sessions
+opensearch.xml

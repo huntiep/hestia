@@ -1,8 +1,12 @@
+<head>
+    <link rel="search" type="application/opensearchdescription+xml" title="Hestia" href="/opensearch/{{.api_key}}/opensearch.xml">
+</head>
+
 <a href="/settings">Settings</a>
 <a href="/logout">Logout</a><br>
 <p>{{search_uses.0}} Default Searches, {{search_uses.1}} Meta Searches<p><br>
 
-<form method="POST" action="/search">
+<form method="POST" action="/search/{{.api_key}}">
     <input name="q" type="text" autofocus="true" search_/>
 </form>
 

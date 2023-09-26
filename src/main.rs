@@ -154,9 +154,8 @@ fn main() {
         get "/settings/links/{id:[[:digit:]]+}" => settings::delete_link,
 
         // search
-        post "/search" => search,
-        get "/search" => search_n,
-        post "/opensearch.xml" => opensearch,
+        post "/search/{api-key}" => search,
+        get "/opensearch/{api-key}/opensearch.xml" => opensearch,
 
         // finance
         get "/finance" => finance::home,

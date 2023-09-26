@@ -35,10 +35,14 @@ pub fn user(pool: &Pool, username: &str) -> Result<Login> {
     })?)
 }
 
-pub fn user_by_api_key(pool: &Pool, api_key: &str) -> Result<String> {
+pub fn user_by_api_key(pool: &Pool, api_key: &str) -> Result<Option<String>> {
     let conn = pool.get()?;
     let mut stmt = conn.prepare(query!("SELECT username FROM users WHERE api_key = ?1"))?;
-    Ok(stmt.query_row(params![api_key], |row| row.get(0))?)
+    match stmt.query_row(params![api_key], |row| row.get(0)) {
+        Ok(key) => Ok(key),
+        Err(rusqlite::Error::QueryReturnedNoRows) => Ok(None),
+        Err(e) => Err(Error::from(e)),
+    }
 }
 
 pub fn search_uses(pool: &Pool, username: &str) -> Result<(u32, u32)> {

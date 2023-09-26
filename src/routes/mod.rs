@@ -82,39 +82,14 @@ route!{logout, req, res, ctx, {
     redirect!(res, ctx, "", "Logout successful");
 }}
 
-// POST /search
+// POST /search/{api-key}
 route!{search, req, res, ctx, {
-    let cookies = req.get_cookies();
-    let username = check_login!(&cookies, res, ctx);
-
-    let search = if let Some(s) = req.form_value("q") {
-        s
+    let api_key = req.get_param("api-key");
+    let username = if let Some(u) = db::read::user_by_api_key(&ctx.db_pool, &api_key)? {
+        u
     } else {
         redirect!(res, ctx, "", "Invalid content");
     };
-
-    if search.starts_with('!') {
-        let terms: Vec<&str> = search.splitn(2, ' ').collect();
-        let (bang, search): (&str, &str) = (&terms[0][1..], terms[1]);
-        let (bang_id, bang) = db::read::bang(&ctx.db_pool, username, bang)?;
-        db::update::search_uses(&ctx.db_pool, username, bang_id, false)?;
-        let url = bang + search;
-        ok!(res.redirect(Status::FOUND, &url, "You are being redirected"));
-    } else {
-        let (bang_id, bang) = db::read::bang(&ctx.db_pool, username, "default")?;
-        db::update::search_uses(&ctx.db_pool, username, bang_id, true)?;
-        ok!(res.redirect(Status::TEMPORARY_REDIRECT, &bang, "You are being redirected"));
-    }
-}}
-
-// get /search
-route!{search_n, req, res, ctx, {
-    let api_key = if let Some(s) = req.form_value("a") {
-        s
-    } else {
-        redirect!(res, ctx, "", "Invalid content");
-    };
-    let username = db::read::user_by_api_key(&ctx.db_pool, &api_key)?;
 
     let search = if let Some(s) = req.form_value("q") {
         s
@@ -136,9 +111,13 @@ route!{search_n, req, res, ctx, {
     }
 }}
 
-// GET /opensearch.xml
+// GET /opensearch/{api-key}/opensearch.xml
 route!{opensearch, req, res, ctx, {
-    Ok(res.body(include_str!("../../opensearch.xml")))
+    let api_key = req.get_param("api-key");
+    let tmpl = include_str!("../../opensearch.xml");
+    let mut tmpl: Vec<_> = tmpl.split("APIKEY").collect();
+    tmpl.insert(1, &api_key);
+    Ok(res.body(tmpl.into_iter().collect::<String>()))
 }}
 
 route!{not_found, req, res, ctx, {

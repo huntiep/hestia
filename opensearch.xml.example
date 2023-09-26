@@ -3,9 +3,9 @@
   <ShortName>Hestia</ShortName>
   <Description>Hestia custom search</Description>
   <InputEncoding>UTF-8</InputEncoding>
-  <Url type="text/html" method="POST" template="https://hestia.hunterpraska.com/search">
+  <Url type="text/html" method="POST" template="https://YOUR_URL/search/APIKEY">
     <Param name="q" value="{searchTerms}"/>
   </Url>
-  <URL type="application/opensearchdescription+xml" rel="self" template="https://hestia.hunterpraska.com/opensearch.xml" />
+  <URL type="application/opensearchdescription+xml" rel="self" template="https://YOUR_URL/opensearch.xml" />
   <moz:SearchForm>YOUR_URL</moz:SearchForm>
 </OpenSearchDescription>
