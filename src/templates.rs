@@ -71,3 +71,9 @@ pub struct FinanceHomeTmpl {
 pub struct FinanceAccountTmpl {
     pub transactions: Transactions,
 }
+
+#[derive(BartDisplay)]
+#[template = "templates/inventory/home.html"]
+pub struct InventoryHomeTmpl {
+    pub inventory: Vec<Item>,
+}

@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS inventory (
+    id INTEGER PRIMARY KEY,
+    owner INTEGER REFERENCES users (id) ON DELETE CASCADE,
+    name VARCHAR NOT NULL,
+    quantity INTEGER NOT NULL,
+    unit VARCHAR NOT NULL
+);

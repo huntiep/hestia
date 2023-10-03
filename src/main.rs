@@ -102,6 +102,8 @@ fn main() {
                 .down(include_str!("../migrations/2/down.sql")),
             M::up(include_str!("../migrations/3/up.sql"))
                 .down(include_str!("../migrations/3/down.sql")),
+            M::up(include_str!("../migrations/4/up.sql"))
+                .down(include_str!("../migrations/4/down.sql")),
         ]);
         let mut conn = pool.get().unwrap();
         migrations.to_latest(&mut conn).unwrap();
@@ -164,6 +166,11 @@ fn main() {
         post "/finance/account/{id:[[:digit:]]+}" => finance::edit_account,
         get "/finance/account/{id:[[:digit:]]+}/delete" => finance::delete_account,
         post "/finance/transaction" => finance::new_transaction,
+
+        // inventory
+        get "/inventory" => inventory::home,
+        post "/inventory/new" => inventory::new_item,
+        post "/inventory/item/{id:[[:digit:]]+}" => inventory::edit_item,
 
         // reminders
         post "/reminders/new" => reminders::new_reminder,

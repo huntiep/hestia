@@ -44,3 +44,10 @@ pub fn quick_link(pool: &Pool, link: &Link) -> Result<()> {
         params![link.name, link.url, link.owner, link.id])?;
     Ok(())
 }
+
+pub fn inventory_set_quantity(pool: &Pool, owner: i32, item_id: i32, quantity: i32) -> Result<()> {
+    let conn = pool.get()?;
+    conn.execute(query!("UPDATE inventory SET quantity = ?3 WHERE owner = ?1 and id = ?2"),
+        params![owner, item_id, quantity])?;
+    Ok(())
+}

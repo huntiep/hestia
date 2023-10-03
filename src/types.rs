@@ -256,3 +256,30 @@ pub struct Reminders {
     pub month: Vec<(String, String)>,
     pub year: Vec<(String, String)>,
 }
+
+pub struct Item {
+    pub id: i32,
+    pub owner: i32,
+    pub name: String,
+    pub quantity: i32,
+    pub unit: String,
+}
+
+impl Item {
+    pub fn new(req: &mut Request, owner: i32) -> Option<Self> {
+        let (name, quantity) = form_values!(req, "name", "quantity");
+        let quantity = quantity.parse().ok()?;
+        let mut unit = req.form_value("unit")?;
+        if unit.is_empty() {
+            unit = "units".to_string();
+        }
+
+        Some(Item {
+            id: 0,
+            owner,
+            name,
+            quantity,
+            unit,
+        })
+    }
+}

@@ -1,0 +1,23 @@
+<a href="/">Home</a>
+<a href="/settings">Settings</a>
+<a href="/logout">Logout</a><br>
+
+<h3>Create a New Item</h3>
+<form method="POST" action="/inventory/new">
+    <label for="name">Name</label>
+    <input name="name" type="text"/><br>
+    <label for="quantity">Quantity</label>
+    <input name="quantity" type="number" value="0" step="1" min="0"/><br>
+    <label for="unit">Unit</label>
+    <input name="unit" type="text"/><br>
+    <button type="submit">Create Item</button>
+</form>
+
+<h3>Inventory</h3>
+<ul>
+{{#inventory}}
+    <li><p><b>{{.name}} Inventory: </b>
+        <form method = "POST" action="/inventory/item/{{.id}}"><input name="quantity" type="number" value="{{.quantity}}" step="1"/> {{.unit}} <button type="submit">Change quantity</button></form>
+    </p></li>
+{{/inventory}}
+</ul>

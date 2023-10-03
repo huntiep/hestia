@@ -1,3 +1,4 @@
+<a href="/">Home</a>
 <a href="/settings">Settings</a>
 <a href="/logout">Logout</a><br>
 
@@ -34,6 +35,6 @@
 <h3>Accounts</h3>
 <ul>
 {{#accounts}}
-    <p><b>{{.name}} Balance: </b>${{.dollars}}.{{.cents}} <a href="/finance/account/{{.id}}">Transaction History</a></p>
+    <li><p><b>{{.name}} Balance: </b>${{.dollars}}.{{.cents}} <a href="/finance/account/{{.id}}">Transaction History</a></p></li>
 {{/accounts}}
 </ul>

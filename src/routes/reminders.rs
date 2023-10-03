@@ -1,7 +1,7 @@
 use db;
 use types::*;
 
-// POST /new
+// POST /reminders/new
 route!{new_reminder, req, res, ctx, {
     let cookies = req.get_cookies();
     let username = check_login!(&cookies, res, ctx);

@@ -267,3 +267,23 @@ pub fn reminders(pool: &Pool, username: &str) -> Result<Reminders> {
         year,
     })
 }
+
+pub fn inventory(pool: &Pool, username: &str) -> Result<Vec<Item>> {
+    let id = user_id(pool, username)?;
+    let conn = pool.get()?;
+    let mut stmt = conn.prepare(query!("SELECT id, name, quantity, unit FROM inventory WHERE owner = ?1"))?;
+    let rows = stmt.query_map(params![id], |row| {
+        Ok(Item {
+            id: row.get(0)?,
+            owner: 0,
+            name: row.get(1)?,
+            quantity: row.get(2)?,
+            unit: row.get(3)?,
+        })
+    })?;
+    let mut inventory = Vec::new();
+    for r in rows {
+        inventory.push(r?);
+    }
+    Ok(inventory)
+}

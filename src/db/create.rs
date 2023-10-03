@@ -64,3 +64,10 @@ pub fn reminder(pool: &Pool, owner: i32, reminder: Reminder) -> Result<()> {
         params![owner, reminder.recurrence as i32, reminder.reason, reminder.date])?;
     Ok(())
 }
+
+pub fn inventory_item(pool: &Pool, item: Item) -> Result<()> {
+    let conn = pool.get()?;
+    conn.execute(query!("INSERT INTO inventory (owner, name, quantity, unit) VALUES (?1, ?2, ?3, ?4)"),
+        params![item.owner, item.name, item.quantity, item.unit])?;
+    Ok(())
+}
