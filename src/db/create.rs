@@ -67,7 +67,7 @@ pub fn reminder(pool: &Pool, owner: i32, reminder: Reminder) -> Result<()> {
 
 pub fn inventory_item(pool: &Pool, item: Item) -> Result<()> {
     let conn = pool.get()?;
-    conn.execute(query!("INSERT INTO inventory (owner, name, quantity, unit) VALUES (?1, ?2, ?3, ?4)"),
-        params![item.owner, item.name, item.quantity, item.unit])?;
+    conn.execute(query!("INSERT INTO inventory (owner, name, quantity, unit, low_reminder) VALUES (?1, ?2, ?3, ?4, ?5)"),
+        params![item.owner, item.name, item.quantity, item.unit, item.low_reminder])?;
     Ok(())
 }

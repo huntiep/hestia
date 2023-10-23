@@ -2,6 +2,8 @@ use Result;
 use types::*;
 use super::Pool;
 
+use chrono::Utc;
+
 pub fn password(pool: &Pool, password: &Login) -> Result<()> {
     let conn = pool.get()?;
     conn.execute(query!("UPDATE users SET password = ?1 WHERE username = ?2"),
@@ -47,7 +49,12 @@ pub fn quick_link(pool: &Pool, link: &Link) -> Result<()> {
 
 pub fn inventory_set_quantity(pool: &Pool, owner: i32, item_id: i32, quantity: i32) -> Result<()> {
     let conn = pool.get()?;
-    conn.execute(query!("UPDATE inventory SET quantity = ?3 WHERE owner = ?1 and id = ?2"),
-        params![owner, item_id, quantity])?;
+    let (name, low_reminder): (String, i32) = conn.query_row(query!("UPDATE inventory SET quantity = ?3 WHERE owner = ?1 and id = ?2 RETURNING name, low_reminder"),
+        params![owner, item_id, quantity],
+        |row| Ok((row.get(0)?, row.get(1)?)))?;
+    if quantity <= low_reminder {
+        let reminder = Reminder { recurrence: Recurrence::None, reason: format!("Buy more {}", name), date: Utc::now().date_naive() + ::chrono::Days::new(7) };
+        super::create::reminder(pool, owner, reminder)?;
+    }
     Ok(())
 }

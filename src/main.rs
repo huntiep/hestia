@@ -104,6 +104,8 @@ fn main() {
                 .down(include_str!("../migrations/3/down.sql")),
             M::up(include_str!("../migrations/4/up.sql"))
                 .down(include_str!("../migrations/4/down.sql")),
+            M::up(include_str!("../migrations/5/up.sql"))
+                .down(include_str!("../migrations/5/down.sql")),
         ]);
         let mut conn = pool.get().unwrap();
         migrations.to_latest(&mut conn).unwrap();

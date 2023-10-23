@@ -263,12 +263,14 @@ pub struct Item {
     pub name: String,
     pub quantity: i32,
     pub unit: String,
+    pub low_reminder: i32,
 }
 
 impl Item {
     pub fn new(req: &mut Request, owner: i32) -> Option<Self> {
-        let (name, quantity) = form_values!(req, "name", "quantity");
+        let (name, quantity, low) = form_values!(req, "name", "quantity", "low");
         let quantity = quantity.parse().ok()?;
+        let low_reminder = low.parse().ok()?;
         let mut unit = req.form_value("unit")?;
         if unit.is_empty() {
             unit = "units".to_string();
@@ -280,6 +282,7 @@ impl Item {
             name,
             quantity,
             unit,
+            low_reminder
         })
     }
 }
